@@ -1,23 +1,59 @@
-import logo from './logo.svg';
+import React from 'react'
 import './App.css';
+import YeniKisi from './YeniKisi'
+import KisiDuzenle from './KisiDuzenle'
 
 function App() {
+
+  const [kisiler, setKisiler] = React.useState([
+    { ad: "Ali", soyad: "Can" },
+    { ad: "Ayşe", soyad: "Öz" }
+  ]);
+
+  const handleYeniKisi = function(kisi){
+    setKisiler([...kisiler,kisi]);
+  };
+
+  const handleVeriDegisikligi = function (indeks, kisi) {
+    const yeniKisiler = [...kisiler];
+    yeniKisiler[indeks] = kisi;
+    setKisiler(yeniKisiler);
+  };
+
+  const handleVeriSilinmesi = function(index){
+    const yeniKisiler = [...kisiler];
+    yeniKisiler.splice(index,1);
+    setKisiler(yeniKisiler);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+           <h1>Kişiler</h1>
+
+      <fieldset>
+        <legend>Yeni Kişi</legend>
+        <YeniKisi yeniKisiEklendi={handleYeniKisi} />
+      </fieldset>
+
+      <ul>
+        {kisiler.map((kisi, indeks) => (
+          <li key={indeks}>
+            {kisi.ad} {kisi.soyad}
+          </li>
+        ))}
+      </ul>
+
+      <fieldset>
+        <legend>Kişileri Düzenle</legend>
+        {kisiler.map((x, i) => (
+          <KisiDuzenle
+            kisi={x}
+            index={i}
+            verilerDegisti={handleVeriDegisikligi}
+            veriSilindi ={handleVeriSilinmesi}
+          />
+        ))}
+      </fieldset>
     </div>
   );
 }
